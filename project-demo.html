@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAV自动化爬虫工具 v0.26 - 项目展示</title>
+<style>
+:root {
+  --bg: #0a0a14;
+  --bg2: #12121f;
+  --card: #1a1a2e;
+  --card2: #1e1e35;
+  --accent: #7c6cf0;
+  --accent2: #00d4ff;
+  --accent3: #ff6b9d;
+  --green: #00e5a0;
+  --orange: #ff9d4d;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --border: rgba(124,108,240,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,20,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:58px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--text)}
+.nav-logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.nav-links{display:flex;gap:6px}
+.nav-links a{color:var(--text2);text-decoration:none;padding:5px 14px;border-radius:20px;font-size:13px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:rgba(124,108,240,0.15);color:var(--accent)}
+.nav-badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+
+/* SECTIONS */
+section{min-height:100vh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:80px 40px 40px;position:relative}
+
+/* HERO */
+.hero{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(124,108,240,0.12) 0%,transparent 70%),var(--bg);flex-direction:column;text-align:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(124,108,240,0.12);border:1px solid var(--border);border-radius:20px;padding:5px 16px;font-size:12px;color:var(--accent);margin-bottom:28px;letter-spacing:.5px}
+.hero-eyebrow span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+h1.hero-title{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
+h1.hero-title .grad{background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(15px,2vw,19px);color:var(--text2);max-width:620px;line-height:1.7;margin:0 auto 36px}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#9b8cf5);color:#fff;box-shadow:0 4px 20px rgba(124,108,240,0.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,108,240,0.45)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{background:rgba(124,108,240,0.1);border-color:var(--accent)}
+.hero-stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:36px;font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:12px;color:var(--text2);margin-top:2px}
+.hero-scroll{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);color:var(--text2);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.arrow-down{width:20px;height:20px;border-right:2px solid var(--text2);border-bottom:2px solid var(--text2);transform:rotate(45deg)}
+
+/* SECTION HEADER */
+.section-header{text-align:center;margin-bottom:52px}
+.section-tag{display:inline-block;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:var(--accent2);font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.section-title{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.2;letter-spacing:-.5px}
+.section-desc{color:var(--text2);font-size:15px;margin-top:10px;max-width:560px;margin-left:auto;margin-right:auto}
+
+/* FEATURES GRID */
+#features{background:var(--bg2)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1100px;width:100%}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,108,240,0.04),transparent);pointer-events:none}
+.feat-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 12px 40px rgba(124,108,240,0.15)}
+.feat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.feat-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.feat-desc{font-size:13px;color:var(--text2);line-height:1.7}
+.feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.tag-purple{background:rgba(124,108,240,0.15);color:var(--accent)}
+.tag-cyan{background:rgba(0,212,255,0.12);color:var(--accent2)}
+.tag-pink{background:rgba(255,107,157,0.12);color:var(--accent3)}
+.tag-green{background:rgba(0,229,160,0.12);color:var(--green)}
+.tag-orange{background:rgba(255,157,77,0.12);color:var(--orange)}
+
+/* ARCH */
+#arch{background:var(--bg);flex-direction:column}
+.arch-container{max-width:1100px;width:100%}
+.arch-diagram{display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;align-items:start;gap:0;margin-bottom:40px}
+.arch-col{display:flex;flex-direction:column;gap:10px}
+.arch-layer{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.arch-layer-title{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.arch-item{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.arch-item:last-child{border-bottom:none}
+.arch-item strong{color:var(--text);display:block;font-size:12px}
+.arch-item span{font-size:11px}
+.arch-arrow{display:flex;align-items:center;justify-content:center;padding-top:30px}
+.arrow-icon{color:var(--accent);font-size:22px;opacity:.6}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.tech-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px}
+.tech-logo{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.tech-name{font-size:13px;font-weight:600}
+.tech-role{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* DEMO */
+#demo{background:var(--bg2);flex-direction:column}
+.demo-tabs{display:flex;gap:8px;margin-bottom:28px;background:var(--card);border-radius:12px;padding:6px}
+.demo-tab{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:all .2s}
+.demo-tab.active{background:var(--accent);color:#fff}
+.demo-panel{display:none;max-width:1000px;width:100%}
+.demo-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.demo-panel.active.single{grid-template-columns:1fr}
+.mock-window{background:#0d0d1a;border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.4)}
+.window-bar{background:#1a1a28;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.window-dot{width:10px;height:10px;border-radius:50%}
+.window-title{font-size:11px;color:var(--text2);margin-left:8px;flex:1}
+.window-body{padding:16px;font-size:12px;font-family:'Courier New',monospace}
+.log-line{padding:2px 0;display:flex;gap:8px;line-height:1.5}
+.log-time{color:#4a4a6a;flex-shrink:0}
+.log-info{color:var(--accent2)}
+.log-success{color:var(--green)}
+.log-warn{color:var(--orange)}
+.log-error{color:var(--accent3)}
+.log-label{color:var(--text2)}
+.config-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.config-row:last-child{border-bottom:none}
+.config-key{font-size:12px;color:var(--text2);width:100px;flex-shrink:0}
+.config-val{font-size:12px;color:var(--text);background:rgba(255,255,255,0.05);border-radius:6px;padding:4px 10px;flex:1;border:1px solid rgba(255,255,255,0.08)}
+.config-btn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer}
+.progress-block{margin-top:12px}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px}
+.prog-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.stat-box{background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center}
+.stat-box-num{font-size:20px;font-weight:700;color:var(--accent2)}
+.stat-box-label{font-size:10px;color:var(--text2);margin-top:2px}
+.feature-list{list-style:none}
+.feature-list li{padding:7px 0;font-size:13px;display:flex;align-items:flex-start;gap:8px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.feature-list li:last-child{border-bottom:none}
+.feature-list .icon{color:var(--green);flex-shrink:0;margin-top:1px}
+.demo-desc{padding:0 0 0 0}
+.demo-desc h3{font-size:18px;font-weight:700;margin-bottom:10px}
+.demo-desc p{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+.demo-badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.demo-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600}
+
+/* AD DETECT */
+.ad-pipeline{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.ad-stage{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:11px;text-align:center;flex:1}
+.ad-stage-name{color:var(--accent);font-weight:600;margin-bottom:4px}
+.ad-stage-detail{color:var(--text2)}
+.ad-arrow{color:var(--text2);font-size:16px;flex-shrink:0}
+.result-row{display:flex;align-items:center;gap:8px;padding:5px 0}
+.result-icon{font-size:14px}
+.result-text{font-size:12px;color:var(--text2)}
+.result-badge{margin-left:auto;font-size:10px;padding:2px 8px;border-radius:10px}
+
+/* USAGE */
+#usage{background:var(--bg);flex-direction:column}
+.steps-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:1100px;width:100%;margin-bottom:40px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;transition:all .3s}
+.step-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.step-num{position:absolute;top:-14px;left:24px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:20px}
+.step-icon{font-size:28px;margin-bottom:12px}
+.step-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.7}
+.config-examples{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1100px;width:100%}
+.config-example-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.config-example-header{background:linear-gradient(135deg,rgba(124,108,240,0.15),rgba(0,212,255,0.1));padding:14px 20px;font-size:14px;font-weight:600;border-bottom:1px solid var(--border)}
+.config-example-body{padding:16px 20px}
+.param-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px}
+.param-row:last-child{border-bottom:none}
+.param-key{color:var(--text2)}
+.param-val{color:var(--accent2);font-family:monospace;background:rgba(0,212,255,0.08);padding:2px 8px;border-radius:4px}
+.param-val.required{color:var(--accent3);background:rgba(255,107,157,0.1)}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px;text-align:center}
+.footer-logo{font-size:20px;font-weight:800;margin-bottom:8px}
+.footer-sub{font-size:12px;color:var(--text2);margin-bottom:20px}
+.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:13px;transition:color .2s}
+.footer-links a:hover{color:var(--accent)}
+.footer-copy{font-size:11px;color:#4a4a6a;margin-top:20px}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:200;transition:width .1s}
+
+/* PARTICLES */
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--accent);opacity:.3;animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:.3}90%{opacity:.3}100%{transform:translateY(-20px) translateX(var(--dx));opacity:0}}
+
+/* GLOW ORBS */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:.12}
+.orb1{width:500px;height:500px;background:var(--accent);top:-100px;right:-100px}
+.orb2{width:400px;height:400px;background:var(--accent2);bottom:-80px;left:-80px}
+
+/* ANIMATED COUNTER */
+.counter{display:inline-block}
+
+@media(max-width:768px){
+  .demo-panel.active{grid-template-columns:1fr}
+  .arch-diagram{grid-template-columns:1fr}
+  .arch-arrow{display:none}
+  .config-examples{grid-template-columns:1fr}
+  section{padding:80px 20px 40px}
+  nav{padding:0 20px}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="dot"></div>
+    JAV自动化爬虫工具
+  </div>
+  <div class="nav-links">
+    <a href="#hero" class="active">首页</a>
+    <a href="#features">功能</a>
+    <a href="#arch">架构</a>
+    <a href="#demo">演示</a>
+    <a href="#usage">使用</a>
+  </div>
+  <div class="nav-badge">v0.26</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-eyebrow">
+    <span></span>
+    Windows 桌面应用 · 基于 Electron
+  </div>
+  <h1 class="hero-title">
+    <span class="grad">JAV 自动化</span><br>爬虫工具
+  </h1>
+  <p class="hero-sub">
+    全流程自动化管理平台 — 批量爬取影片信息、智能过滤广告磁力、
+    本地视频整理归类、女优排行榜实时追踪，一键完成。
+  </p>
+  <div class="hero-btns">
+    <a href="#demo" class="btn btn-primary">
+      <span>▶</span> 查看演示
+    </a>
+    <a href="#features" class="btn btn-outline">
+      <span>⊞</span> 功能介绍
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num counter" data-target="10">0</div>
+      <div class="stat-label">镜像域名容灾</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num counter" data-target="3">0</div>
+      <div class="stat-label">AI 检测模型</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num counter" data-target="18">0</div>
+      <div class="stat-label">单元测试套件</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num counter" data-target="26">0</div>
+      <div class="stat-label">历史迭代版本</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>向下滚动</span>
+    <div class="arrow-down"></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div style="max-width:1100px;width:100%">
+    <div class="section-header">
+      <div class="section-tag">核心功能</div>
+      <div class="section-title">完整的 JAV 自动化管理套件</div>
+      <div class="section-desc">从数据抓取到本地整理，覆盖全流程。智能广告过滤，让你的资源库保持纯净。</div>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(124,108,240,0.15)">🕷️</div>
+        <div class="feat-title">批量自动爬取</div>
+        <div class="feat-desc">输入女优主页 URL，自动遍历所有分页，完整获取影片列表与磁力链接。支持数量上限控制，断点续爬不丢进度。</div>
+        <div class="feat-tags">
+          <span class="tag tag-purple">断点续爬</span>
+          <span class="tag tag-cyan">限量控制</span>
+          <span class="tag tag-green">磁力导出</span>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(0,212,255,0.12)">🌐</div>
+        <div class="feat-title">多镜像智能容灾</div>
+        <div class="feat-desc">内置 10+ 个 javbus 镜像站，域名健康评分动态排优。主域名 429/503 时自动切换最优备用，抓取不中断。404早停机制避免无效循环。</div>
+        <div class="feat-tags">
+          <span class="tag tag-cyan">10+ 镜像</span>
+          <span class="tag tag-purple">健康评分</span>
+          <span class="tag tag-orange">404早停</span>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(255,107,157,0.12)">🤖</div>
+        <div class="feat-title">AI 广告智能过滤</div>
+        <div class="feat-desc">双阶段过滤体系：DHT 磁力内容探测快速筛除广告包，AI 帧级检测（MobileNetV3 / SqueezeNet / YOLOv8n）深度识别。</div>
+        <div class="feat-tags">
+          <span class="tag tag-pink">MobileNetV3</span>
+          <span class="tag tag-pink">YOLOv8n</span>
+          <span class="tag tag-green">自学习</span>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(0,229,160,0.12)">📁</div>
+        <div class="feat-title">视频文件自动整理</div>
+        <div class="feat-desc">自动扫描本地目录，按番号精准匹配。批量重命名（标准格式）、移动归档、清理空目录，并生成完整整理报告。</div>
+        <div class="feat-tags">
+          <span class="tag tag-green">番号匹配</span>
+          <span class="tag tag-cyan">批量重命名</span>
+          <span class="tag tag-purple">补漏对照</span>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(255,157,77,0.12)">🏆</div>
+        <div class="feat-title">女优排行榜</div>
+        <div class="feat-desc">FANZA 官方排行榜 + Avfan 第三方双数据源，实时同步。本地历史记录，趋势对比一目了然，一键填充爬虫参数。</div>
+        <div class="feat-tags">
+          <span class="tag tag-orange">FANZA官方</span>
+          <span class="tag tag-cyan">Avfan源</span>
+          <span class="tag tag-purple">趋势对比</span>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:rgba(124,108,240,0.15)">💻</div>
+        <div class="feat-title">现代化桌面界面</div>
+        <div class="feat-desc">Electron 构建的 Windows 原生体验。实时进度面板、彩色日志查看器、配置中心，全中文操作，双击 EXE 即用无需安装。</div>
+        <div class="feat-tags">
+          <span class="tag tag-purple">全中文</span>
+          <span class="tag tag-green">零配置</span>
+          <span class="tag tag-cyan">实时日志</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCH -->
+<section id="arch">
+  <div class="arch-container">
+    <div class="section-header">
+      <div class="section-tag">技术架构</div>
+      <div class="section-title">三层解耦架构设计</div>
+      <div class="section-desc">渲染进程 / 主进程 / 爬虫核心 严格分层，沙盒安全隔离，IPC 通道常量化管理。</div>
+    </div>
+    <div class="arch-diagram">
+      <div class="arch-col">
+        <div class="arch-layer">
+          <div class="arch-layer-title">🖥 渲染进程 (Renderer)</div>
+          <div class="arch-item"><strong>renderer.js</strong><span>控制器初始化入口</span></div>
+          <div class="arch-item"><strong>formController</strong><span>爬虫表单配置</span></div>
+          <div class="arch-item"><strong>organizerController</strong><span>视频整理控制</span></div>
+          <div class="arch-item"><strong>rankingController</strong><span>排行榜展示</span></div>
+          <div class="arch-item"><strong>logController</strong><span>日志面板</span></div>
+          <div class="arch-item"><strong>stateController</strong><span>运行状态展示</span></div>
+        </div>
+        <div class="arch-layer" style="border-color:rgba(0,212,255,0.3)">
+          <div class="arch-layer-title" style="color:var(--accent2)">🔒 preload.js (沙盒)</div>
+          <div class="arch-item"><strong>contextBridge</strong><span>安全API暴露</span></div>
+          <div class="arch-item"><strong>ipcRenderer</strong><span>消息通道封装</span></div>
+        </div>
+      </div>
+      <div class="arch-arrow"><div class="arrow-icon">⇄</div></div>
+      <div class="arch-col">
+        <div class="arch-layer" style="border-color:rgba(255,107,157,0.3)">
+          <div class="arch-layer-title" style="color:var(--accent3)">⚙️ 主进程 (Main)</div>
+          <div class="arch-item"><strong>main.js</strong><span>应用入口</span></div>
+          <div class="arch-item"><strong>ipcHandlers.js</strong><span>IPC消息处理器</span></div>
+          <div class="arch-item"><strong>runnerService</strong><span>爬虫任务管理</span></div>
+          <div class="arch-item"><strong>organizerService</strong><span>整理任务管理</span></div>
+          <div class="arch-item"><strong>settingsStore</strong><span>配置持久化</span></div>
+          <div class="arch-item"><strong>windowService</strong><span>窗口管理</span></div>
+        </div>
+      </div>
+      <div class="arch-arrow"><div class="arrow-icon">↓</div></div>
+      <div class="arch-col">
+        <div class="arch-layer" style="border-color:rgba(0,229,160,0.3)">
+          <div class="arch-layer-title" style="color:var(--green)">🕷️ 爬虫核心 (src/core)</div>
+          <div class="arch-item"><strong>scraperRunner</strong><span>任务主流程</span></div>
+          <div class="arch-item"><strong>requestHandler</strong><span>HTTP请求/代理/镜像</span></div>
+          <div class="arch-item"><strong>queueManager</strong><span>并发队列调度</span></div>
+          <div class="arch-item"><strong>parser</strong><span>HTML解析</span></div>
+          <div class="arch-item"><strong>magnetContentValidation</strong><span>磁力内容校验</span></div>
+          <div class="arch-item"><strong>fileHandler</strong><span>结果写盘</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <div class="section-header" style="margin-bottom:20px">
+        <div class="section-tag" style="background:rgba(255,157,77,0.1);border-color:rgba(255,157,77,0.3);color:var(--orange)">技术栈</div>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-logo" style="background:rgba(124,108,240,0.15)">⚡</div>
+          <div><div class="tech-name">Electron v37</div><div class="tech-role">Windows桌面框架</div></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:rgba(0,212,255,0.12)">TS</div>
+          <div><div class="tech-name">TypeScript v5.9</div><div class="tech-role">爬虫核心语言</div></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:rgba(0,229,160,0.12)">🌐</div>
+          <div><div class="tech-name">Axios + Cheerio</div><div class="tech-role">HTTP请求 + HTML解析</div></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:rgba(255,107,157,0.12)">🎭</div>
+          <div><div class="tech-name">Puppeteer Core</div><div class="tech-role">Cloudflare验证绕过</div></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:rgba(255,157,77,0.12)">🧲</div>
+          <div><div class="tech-name">magnet2torrent-js</div><div class="tech-role">DHT磁力内容探测</div></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-logo" style="background:rgba(124,108,240,0.15)">📦</div>
+          <div><div class="tech-name">electron-builder</div><div class="tech-role">便携版+安装版打包</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo">
+  <div style="max-width:1000px;width:100%">
+    <div class="section-header">
+      <div class="section-tag">功能演示</div>
+      <div class="section-title">真实运行效果预览</div>
+    </div>
+    <div class="demo-tabs">
+      <button class="demo-tab active" onclick="switchTab('crawler')">🕷️ 爬虫运行</button>
+      <button class="demo-tab" onclick="switchTab('organizer')">📁 视频整理</button>
+      <button class="demo-tab" onclick="switchTab('adfilter')">🤖 广告过滤</button>
+      <button class="demo-tab" onclick="switchTab('ranking')">🏆 排行榜</button>
+    </div>
+
+    <!-- CRAWLER TAB -->
+    <div class="demo-panel active" id="tab-crawler">
+      <div>
+        <div class="mock-window">
+          <div class="window-bar">
+            <div class="window-dot" style="background:#ff5f57"></div>
+            <div class="window-dot" style="background:#ffbd2e"></div>
+            <div class="window-dot" style="background:#28c840"></div>
+            <div class="window-title">运行日志 — 深田えいみ · 552 条</div>
+          </div>
+          <div class="window-body">
+            <div class="log-line"><span class="log-time">00:41:50</span><span class="log-info">[信息]</span><span class="log-label">开始执行 JAV 抓取任务...</span></div>
+            <div class="log-line"><span class="log-time">00:41:51</span><span class="log-info">[信息]</span><span class="log-label">totalPages: 18, limit: 552</span></div>
+            <div class="log-line"><span class="log-time">00:41:52</span><span class="log-success">[成功]</span><span class="log-label">第 1 页解析到 30 个链接</span></div>
+            <div class="log-line"><span class="log-time">00:42:10</span><span class="log-success">[成功]</span><span class="log-label">磁力获取: WANZ-967 深田えいみ</span></div>
+            <div class="log-line"><span class="log-time">00:42:39</span><span class="log-warn">[警告]</span><span class="log-label">域名 javbus.com 连续失败，切换备用</span></div>
+            <div class="log-line"><span class="log-time">00:42:40</span><span class="log-info">[信息]</span><span class="log-label">已锁定可用域名: fanbus.bond</span></div>
+            <div class="log-line"><span class="log-time">00:47:36</span><span class="log-success">[成功]</span><span class="log-label">磁力获取: JUL-064 向かい部屋の人妻</span></div>
+            <div class="log-line"><span class="log-time">00:48:20</span><span class="log-success">[完成]</span><span class="log-label">抓取完成，共 404 条，耗时 6m 30s</span></div>
+          </div>
+        </div>
+        <div class="progress-block" style="margin-top:14px">
+          <div class="mock-window">
+            <div class="window-bar">
+              <div class="window-title">实时统计</div>
+            </div>
+            <div class="window-body">
+              <div class="stat-grid">
+                <div class="stat-box"><div class="stat-box-num">404</div><div class="stat-box-label">已抓取</div></div>
+                <div class="stat-box"><div class="stat-box-num" style="color:var(--orange)">12</div><div class="stat-box-label">队列中</div></div>
+                <div class="stat-box"><div class="stat-box-num" style="color:var(--green)">98%</div><div class="stat-box-label">成功率</div></div>
+              </div>
+              <div style="margin-top:12px">
+                <div class="prog-row"><span>总进度</span><span>404 / 552</span></div>
+                <div class="prog-bar"><div class="prog-fill" style="width:73%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-desc">
+        <h3>批量爬取 · 断点续爬</h3>
+        <p>输入女优主页 URL，软件自动遍历所有分页，并发抓取影片详情与磁力链接。任务中断后重启，自动从上次进度继续。</p>
+        <ul class="feature-list">
+          <li><span class="icon">✓</span>多镜像自动容灾，主域名异常无缝切换</li>
+          <li><span class="icon">✓</span>实时日志输出，彩色状态区分</li>
+          <li><span class="icon">✓</span>任务状态 JSON 持久化，断电不丢进度</li>
+          <li><span class="icon">✓</span>支持按数量限制（如只抓前 100 条）</li>
+          <li><span class="icon">✓</span>索引页 404 早停，避免无效重试死循环</li>
+          <li><span class="icon">✓</span>磁力链接输出到 magnet-links.txt</li>
+        </ul>
+        <div class="demo-badge-row">
+          <span class="demo-badge tag-purple">并发队列</span>
+          <span class="demo-badge tag-cyan">自动容灾</span>
+          <span class="demo-badge tag-green">断点续爬</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORGANIZER TAB -->
+    <div class="demo-panel" id="tab-organizer">
+      <div>
+        <div class="mock-window">
+          <div class="window-bar">
+            <div class="window-dot" style="background:#ff5f57"></div>
+            <div class="window-dot" style="background:#ffbd2e"></div>
+            <div class="window-dot" style="background:#28c840"></div>
+            <div class="window-title">视频整理 — 整理结果</div>
+          </div>
+          <div class="window-body">
+            <div class="log-line"><span class="log-success">✓</span><span class="log-label">WANZ-967 → WANZ-967 深田えいみ.mp4</span></div>
+            <div class="log-line"><span class="log-success">✓</span><span class="log-label">JUL-064 → JUL-064 向かい部屋の人妻.mp4</span></div>
+            <div class="log-line"><span class="log-success">✓</span><span class="log-label">HND-863 → HND-863 再び！子作りしたい.mp4</span></div>
+            <div class="log-line"><span class="log-warn">⚠</span><span class="log-label">MIAA-221 — 未找到匹配文件，已记录</span></div>
+            <div class="log-line"><span class="log-error">✗</span><span class="log-label">孤立文件: video_unknown_001.mp4 → 待处理</span></div>
+            <div class="log-line" style="margin-top:8px"><span class="log-info">📊</span><span class="log-label">成功: 321 | 跳过: 18 | 未匹配: 12</span></div>
+          </div>
+        </div>
+        <div class="mock-window" style="margin-top:12px">
+          <div class="window-bar"><div class="window-title">整理配置</div></div>
+          <div class="window-body">
+            <div class="config-row"><span class="config-key">视频目录</span><span class="config-val">D:\Videos\JAV</span></div>
+            <div class="config-row"><span class="config-key">整理方式</span><span class="config-val">重命名 + 归档</span></div>
+            <div class="config-row"><span class="config-key">补漏对照</span><span class="config-val">✓ 已开启</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-desc">
+        <h3>智能文件整理 · 补漏对照</h3>
+        <p>自动扫描本地目录，通过番号正则匹配视频文件，批量执行重命名。与爬虫抓取记录对照，找出所有未下载的番号。</p>
+        <ul class="feature-list">
+          <li><span class="icon">✓</span>番号正则精准匹配（支持 ABC-123 等多种格式）</li>
+          <li><span class="icon">✓</span>批量重命名为标准格式：番号 + 标题</li>
+          <li><span class="icon">✓</span>与爬虫记录对照，输出未完成番号清单</li>
+          <li><span class="icon">✓</span>清理空目录、孤立文件检测</li>
+          <li><span class="icon">✓</span>整理报告：成功/失败/跳过统计</li>
+          <li><span class="icon">✓</span>支持预览模式（不实际移动文件）</li>
+        </ul>
+        <div class="demo-badge-row">
+          <span class="demo-badge tag-green">番号匹配</span>
+          <span class="demo-badge tag-purple">补漏对照</span>
+          <span class="demo-badge tag-orange">整理报告</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AD FILTER TAB -->
+    <div class="demo-panel" id="tab-adfilter">
+      <div>
+        <div class="mock-window">
+          <div class="window-bar">
+            <div class="window-dot" style="background:#ff5f57"></div>
+            <div class="window-dot" style="background:#ffbd2e"></div>
+            <div class="window-dot" style="background:#28c840"></div>
+            <div class="window-title">广告过滤 — 双阶段检测流程</div>
+          </div>
+          <div class="window-body">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:10px">阶段一：DHT 磁力内容探测</div>
+            <div class="result-row"><span class="result-icon">🧲</span><span class="result-text">磁力候选 #1: 8.2GB · 验证中...</span><span class="result-badge tag-green">通过</span></div>
+            <div class="result-row"><span class="result-icon">🧲</span><span class="result-text">磁力候选 #2: 2.1GB · 内容异常</span><span class="result-badge tag-pink">过滤</span></div>
+            <div class="result-row"><span class="result-icon">🧲</span><span class="result-text">磁力候选 #3: 0.5GB · 文件数量异常</span><span class="result-badge tag-pink">过滤</span></div>
+            <div style="font-size:11px;color:var(--text2);margin:12px 0 8px">阶段二：AI 帧级广告检测</div>
+            <div class="result-row"><span class="result-icon">🎬</span><span class="result-text">帧采样 32帧 · 模型: MobileNetV3</span><span class="result-badge tag-green">正片</span></div>
+            <div class="result-row"><span class="result-icon">✓</span><span class="result-text" style="color:var(--green)">最终选定磁力 #1 — 8.2GB 完整资源</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-desc">
+        <h3>双阶段广告过滤体系</h3>
+        <p>业界少有的两级过滤架构，快速筛查与深度识别双保险，精准过滤广告包、杂文件包、纯图片包。</p>
+        <div class="ad-pipeline">
+          <div class="ad-stage">
+            <div class="ad-stage-name">快速候选</div>
+            <div class="ad-stage-detail">按体积选最大磁力</div>
+          </div>
+          <div class="ad-arrow">→</div>
+          <div class="ad-stage">
+            <div class="ad-stage-name">DHT 探测</div>
+            <div class="ad-stage-detail">torrent 内容验证</div>
+          </div>
+          <div class="ad-arrow">→</div>
+          <div class="ad-stage">
+            <div class="ad-stage-name">AI 检测</div>
+            <div class="ad-stage-detail">帧级广告识别</div>
+          </div>
+          <div class="ad-arrow">→</div>
+          <div class="ad-stage" style="border-color:rgba(0,229,160,0.4)">
+            <div class="ad-stage-name" style="color:var(--green)">纯净结果</div>
+            <div class="ad-stage-detail">最终磁力</div>
+          </div>
+        </div>
+        <ul class="feature-list" style="margin-top:16px">
+          <li><span class="icon">✓</span>3 款 AI 模型可切换（精度/速度权衡）</li>
+          <li><span class="icon">✓</span>自学习：用户标记自动更新哈希库</li>
+          <li><span class="icon">✓</span>广告处理方式：删除 / 隔离 / 仅标记</li>
+          <li><span class="icon">✓</span>校验超时自动降级（不影响主流程）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RANKING TAB -->
+    <div class="demo-panel" id="tab-ranking">
+      <div>
+        <div class="mock-window">
+          <div class="window-bar">
+            <div class="window-dot" style="background:#ff5f57"></div>
+            <div class="window-dot" style="background:#ffbd2e"></div>
+            <div class="window-dot" style="background:#28c840"></div>
+            <div class="window-title">FANZA 女优排行榜 — 本周</div>
+          </div>
+          <div class="window-body">
+            <div class="log-line" style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)">
+              <span style="color:var(--orange);font-weight:700;width:24px;display:inline-block">#1</span>
+              <span style="color:var(--text)">深田えいみ</span>
+              <span style="margin-left:auto;color:var(--green);font-size:11px">▲3</span>
+            </div>
+            <div class="log-line" style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)">
+              <span style="color:var(--text2);font-weight:700;width:24px;display:inline-block">#2</span>
+              <span style="color:var(--text)">明里つむぎ</span>
+              <span style="margin-left:auto;color:var(--accent3);font-size:11px">▼1</span>
+            </div>
+            <div class="log-line" style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)">
+              <span style="color:var(--text2);font-weight:700;width:24px;display:inline-block">#3</span>
+              <span style="color:var(--text)">桃乃木かな</span>
+              <span style="margin-left:auto;color:var(--accent2);font-size:11px">−</span>
+            </div>
+            <div class="log-line" style="padding:6px 0">
+              <span style="color:var(--text2);font-weight:700;width:24px;display:inline-block">#4</span>
+              <span style="color:var(--text)">天使もえ</span>
+              <span style="margin-left:auto;color:var(--green);font-size:11px">▲5 NEW</span>
+            </div>
+            <div style="margin-top:12px;text-align:center">
+              <button class="config-btn" style="font-size:12px;padding:7px 20px">填入爬虫参数 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-desc">
+        <h3>女优排行榜 · 双数据源</h3>
+        <p>实时同步 FANZA 官方排行榜与 Avfan 第三方榜单，历史趋势对比，一键将感兴趣的女优填入爬虫配置。</p>
+        <ul class="feature-list">
+          <li><span class="icon">✓</span>FANZA 官方源 + Avfan 第三方双渠道</li>
+          <li><span class="icon">✓</span>本地历史存档，排名变化趋势一目了然</li>
+          <li><span class="icon">✓</span>一键填充：将女优 URL 直接填入爬虫</li>
+          <li><span class="icon">✓</span>支持手动刷新，随时获取最新榜单</li>
+        </ul>
+        <div class="demo-badge-row">
+          <span class="demo-badge tag-orange">FANZA</span>
+          <span class="demo-badge tag-cyan">Avfan</span>
+          <span class="demo-badge tag-purple">趋势对比</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USAGE -->
+<section id="usage">
+  <div style="max-width:1100px;width:100%">
+    <div class="section-header">
+      <div class="section-tag">使用说明</div>
+      <div class="section-title">简单四步，开始使用</div>
+      <div class="section-desc">零配置启动，全中文界面，双击 EXE 即用，无需安装任何依赖。</div>
+    </div>
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">⬇️</div>
+        <div class="step-title">下载 EXE</div>
+        <div class="step-desc">从 Releases 页面下载便携版 EXE（134MB），无需安装，双击即可运行。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🌐</div>
+        <div class="step-title">填入 URL</div>
+        <div class="step-desc">在爬虫配置页，粘贴女优主页地址，格式：<code style="color:var(--accent2);font-size:12px">javbus.com/star/xxx</code></div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">▶️</div>
+        <div class="step-title">点击运行</div>
+        <div class="step-desc">点击「开始运行」，实时查看日志进度。任务中断可随时重启，自动续爬。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">📂</div>
+        <div class="step-title">获取结果</div>
+        <div class="step-desc">抓取完成后，在输出目录查看 <code style="color:var(--accent2);font-size:12px">magnet-links.txt</code> 磁力文件。</div>
+      </div>
+    </div>
+    <div class="config-examples">
+      <div class="config-example-card">
+        <div class="config-example-header">🔧 爬虫常用配置</div>
+        <div class="config-example-body">
+          <div class="param-row"><span class="param-key">目标 URL</span><span class="param-val required">必填</span></div>
+          <div class="param-row"><span class="param-key">数量上限</span><span class="param-val">0 = 不限制</span></div>
+          <div class="param-row"><span class="param-key">并发详情页</span><span class="param-val">5（推荐）</span></div>
+          <div class="param-row"><span class="param-key">代理服务器</span><span class="param-val">自动读取系统代理</span></div>
+          <div class="param-row"><span class="param-key">断点续爬</span><span class="param-val">默认开启</span></div>
+          <div class="param-row"><span class="param-key">输出目录</span><span class="param-val">默认桌面</span></div>
+        </div>
+      </div>
+      <div class="config-example-card">
+        <div class="config-example-header">💡 使用技巧</div>
+        <div class="config-example-body">
+          <div class="param-row"><span class="param-key">代理格式</span><span class="param-val">http://127.0.0.1:7890</span></div>
+          <div class="param-row"><span class="param-key">URL格式</span><span class="param-val">javbus.com/star/xxx</span></div>
+          <div class="param-row"><span class="param-key">日志导出</span><span class="param-val">右键日志面板</span></div>
+          <div class="param-row"><span class="param-key">广告模型</span><span class="param-val">配置面板可切换</span></div>
+          <div class="param-row"><span class="param-key">备用镜像</span><span class="param-val">自动选择，无需配置</span></div>
+          <div class="param-row"><span class="param-key">结果文件</span><span class="param-val">输出目录/magnet-links.txt</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">JAV自动化爬虫工具</div>
+  <div class="footer-sub">基于 <a href="https://github.com/raawaa/jav-scrapy" style="color:var(--accent);text-decoration:none">raawaa/jav-scrapy</a> 开源项目二次开发 · Windows 桌面增强版</div>
+  <div class="footer-links">
+    <a href="#hero">↑ 返回顶部</a>
+    <a href="#features">核心功能</a>
+    <a href="#arch">架构说明</a>
+    <a href="#demo">功能演示</a>
+    <a href="#usage">使用说明</a>
+  </div>
+  <div class="footer-copy">v0.26.0 · 本软件仅供学习研究使用</div>
+</footer>
+
+<script>
+// Scroll progress
+const prog = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  prog.style.width = (p * 100) + '%';
+});
+
+// Nav active
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.5 });
+sections.forEach(s => observer.observe(s));
+
+// Counter animation
+const counters = document.querySelectorAll('.counter');
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const target = parseInt(el.dataset.target);
+      let start = 0;
+      const step = target / 40;
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= target) { el.textContent = target + '+'; clearInterval(timer); }
+        else el.textContent = Math.floor(start);
+      }, 30);
+      countObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => countObserver.observe(c));
+
+// Demo tabs
+function switchTab(name) {
+  document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Particles
+const container = document.getElementById('particles');
+for (let i = 0; i < 18; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.cssText = `left:${Math.random()*100}%;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*8}s;--dx:${(Math.random()-0.5)*80}px;opacity:${0.1+Math.random()*0.25}`;
+  container.appendChild(p);
+}
+
+// Smooth reveal on scroll
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.feat-card, .step-card, .tech-card, .config-example-card, .arch-layer').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  revealObserver.observe(el);
+});
+</script>
+</body>
+</html>
