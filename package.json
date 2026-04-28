@@ -1,0 +1,189 @@
+{
+  "name": "jav-auto-crawler-tool",
+  "version": "0.26.0",
+  "type": "commonjs",
+  "description": "Windows desktop JAV automation crawler with a youthful visual workspace.",
+  "main": "dist/jav.js",
+  "preferGlobal": true,
+  "dependencies": {
+    "@types/cli-progress": "^3.11.6",
+    "@types/tunnel": "^0.0.7",
+    "async": "^3.2.6",
+    "axios": "1.13.2",
+    "axios-retry": "^4.5.0",
+    "chalk": "^5.4.1",
+    "cheerio": "^1.1.2",
+    "cli-progress": "^3.12.0",
+    "commander": "12.1.0",
+    "flatbuffers": "^25.9.23",
+    "magnet2torrent-js": "^1.4.0",
+    "onnxruntime-node": "^1.20.1",
+    "puppeteer-core": "^24.28.0",
+    "tunnel": "^0.0.6",
+    "winreg": "^1.2.5",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@types/async": "^3.2.25",
+    "@types/cheerio": "^0.22.35",
+    "@types/node": "^24.10.0",
+    "@types/puppeteer-core": "^5.4.0",
+    "@types/winreg": "^1.2.36",
+    "conventional-changelog-cli": "^4.1.0",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "electron": "^37.10.3",
+    "electron-builder": "^26.0.12",
+    "husky": "^9.1.7",
+    "mocha": "^11.7.4",
+    "nodemon": "^3.1.10",
+    "temp": "^0.9.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "bin": {
+    "jav": "./dist/jav.js"
+  },
+  "files": [
+    "dist",
+    "desktop"
+  ],
+  "scripts": {
+    "test": "npm run build && mocha test/*.test.js",
+    "build": "npx tsc",
+    "check:encoding": "node scripts/check-encoding.js",
+    "prepare:nsis": "node scripts/prepare-nsis-templates.js",
+    "desktop:dev": "npm run build && electron desktop/main.js",
+    "desktop:dist:portable": "npm run build && electron-builder --win portable",
+    "desktop:dist": "npm run build && npm run prepare:nsis && electron-builder --win portable nsis",
+    "desktop:dist:web": "npm run build && npm run prepare:nsis && electron-builder --win nsis-web",
+    "desktop:dist:lite": "npm run build && npm run prepare:nsis && electron-builder --win nsis-web",
+    "desktop:dist:lite-exe": "npm run build && electron-builder --win portable && node scripts/build-lite-exe.js",
+    "desktop:test:ui": "node scripts/smoke-desktop-ui.js",
+    "desktop:dist:demos": "npm run build && node scripts/build-demo-variants.js",
+    "dev": "ts-node src/jav.ts",
+    "dev:watch": "nodemon --exec ts-node src/jav.ts",
+    "release": "npm run build && npm version",
+    "release:major": "npm run build && npm version major -m \"chore(release): %s\"",
+    "release:minor": "npm run build && npm version minor -m \"chore(release): %s\"",
+    "release:patch": "npm run build && npm version patch -m \"chore(release): %s\"",
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
+    "changelog:first": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0",
+    "preversion": "npm test",
+    "version": "npm run changelog && git add CHANGELOG.md"
+  },
+  "build": {
+    "appId": "com.raawaa.jav-auto-crawler-tool",
+    "productName": "JAV自动化爬虫工具",
+    "asar": true,
+    "compression": "maximum",
+    "npmRebuild": false,
+    "electronLanguages": [
+      "zh-CN"
+    ],
+    "electronVersion": "41.0.2",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "package.json",
+      "!dist/**/*.map",
+      "!dist/jav.js",
+      "!dist/jav.js.map",
+      "!node_modules/@types{,/**/*}",
+      "!node_modules/commander{,/**/*}",
+      "!node_modules/cli-progress{,/**/*}"
+    ],
+    "extraFiles": [
+      {
+        "from": "docs",
+        "to": "docs",
+        "filter": [
+          "版本更新记录-0.23.md",
+          "软件说明书-0.23.md",
+          "开发说明书-0.23.md"
+        ]
+      }
+    ],
+    "extraResources": [
+      {
+        "from": "desktop/resources/ffmpeg/win-x64/ffmpeg.exe",
+        "to": "tools/ffmpeg/ffmpeg.exe"
+      },
+      {
+        "from": "desktop/resources/models/mobile-net-v3-small.onnx",
+        "to": "mobile-net-v3-small.onnx"
+      }
+    ],
+    "asarUnpack": [
+      "node_modules/onnxruntime-node/**/*.node",
+      "node_modules/onnxruntime-node/**/*.dll"
+    ],
+    "extraMetadata": {
+      "main": "desktop/main.js",
+      "name": "jav-auto-crawler-tool",
+      "demoMode": "aed",
+      "demoLabel": "AED",
+      "productDisplayName": "JAV自动化爬虫工具",
+      "productDisplayVersion": "0.25"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "executableName": "JAV Auto Crawler Tool",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "installerLanguages": [
+        "zh_CN"
+      ],
+      "language": "2052",
+      "multiLanguageInstaller": true,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "packElevateHelper": false,
+      "unicode": true,
+      "shortcutName": "JAV自动化爬虫工具",
+      "uninstallDisplayName": "JAV自动化爬虫工具",
+      "artifactName": "JAV自动化爬虫工具 安装版 ${version}.${ext}",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "include": "build/installer.nsh"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raawaa/jav-scrapy.git"
+  },
+  "keywords": [
+    "crawler",
+    "scrapy",
+    "jav",
+    "magnet",
+    "torrent",
+    "nodejs",
+    "typescript"
+  ],
+  "homepage": "https://github.com/raawaa/jav-scrapy#readme",
+  "author": "raawaa",
+  "bugs": {
+    "url": "https://github.com/raawaa/jav-scrapy/issues"
+  }
+}
