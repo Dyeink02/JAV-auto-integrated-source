@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>方案 A — 深蓝毛玻璃 · 顶部 Tab</title>
+<style>
+/* ── Tokens ── */
+:root{
+  --bg:#0a0e1a;
+  --surface:rgba(15,22,42,.72);
+  --surface-strong:rgba(18,26,50,.88);
+  --border:rgba(100,140,255,.12);
+  --border-accent:rgba(100,180,255,.35);
+  --text:#eaf0ff;
+  --muted:#8c9bc5;
+  --accent:#5b8cff;
+  --accent2:#38cfb8;
+  --accent3:#f47fff;
+  --danger:#ff6b7a;
+  --warn:#ffb74d;
+  --success:#4fd8a0;
+  --radius-lg:22px;
+  --radius-md:14px;
+  --radius-sm:8px;
+  --shadow-card:0 8px 32px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%;font-family:'Segoe UI Variable Display','Microsoft YaHei UI',system-ui,sans-serif;color:var(--text);background:var(--bg)}
+body{overflow-x:hidden}
+
+/* ── Ambient Background ── */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:0}
+.ambient::before,.ambient::after{content:'';position:absolute;border-radius:50%;filter:blur(120px);opacity:.25}
+.ambient::before{width:600px;height:600px;top:-120px;right:-80px;background:radial-gradient(circle,rgba(91,140,255,.6),transparent 70%)}
+.ambient::after{width:500px;height:500px;bottom:-100px;left:-60px;background:radial-gradient(circle,rgba(56,207,184,.5),transparent 70%)}
+
+/* ── Shell ── */
+.shell{position:relative;z-index:1;max-width:1420px;margin:0 auto;padding:16px 20px 32px}
+
+/* ── Top Bar ── */
+.topbar{display:flex;align-items:center;gap:16px;padding:12px 20px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(20px);margin-bottom:18px}
+.topbar-brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800;letter-spacing:-.02em}
+.topbar-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent2)}
+.topbar-tabs{display:flex;gap:6px;margin-left:auto}
+.topbar-tab{padding:10px 22px;border-radius:var(--radius-md);border:1px solid transparent;background:transparent;color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;transition:.2s}
+.topbar-tab:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.topbar-tab.active{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent3));border-color:rgba(255,255,255,.1);box-shadow:0 4px 20px rgba(91,140,255,.3)}
+.topbar .version{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.08);font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+
+/* ── Hero Banner ── */
+.hero-banner{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;padding:24px 28px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(20px);margin-bottom:18px;box-shadow:var(--shadow-card)}
+.hero-banner h1{font-size:clamp(28px,3vw,42px);font-weight:800;line-height:1.15;background:linear-gradient(135deg,#fff 30%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-subtitle{margin-top:8px;color:var(--muted);line-height:1.65;font-size:14px}
+.hero-tip{margin-top:12px;padding:10px 14px;border-radius:var(--radius-md);background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.15);color:var(--muted);font-size:12px;line-height:1.55}
+.hero-side-card{border-radius:var(--radius-lg);background:rgba(255,255,255,.05);border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:10px}
+.hero-side-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2)}
+.hero-side-list{list-style:none;padding:0;display:grid;gap:6px;max-height:140px;overflow-y:auto}
+.hero-side-list li{padding:8px 12px;border-radius:var(--radius-sm);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);line-height:1.5}
+.hero-side-list li strong{color:var(--accent);margin-right:6px}
+.hero-actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+
+/* ── Main Grid: left form + right stats ── */
+.main-grid{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(340px,1fr);gap:18px}
+.panel{border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(20px);padding:24px;box-shadow:var(--shadow-card);position:relative;overflow:hidden}
+.panel::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 40%);pointer-events:none}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+.panel-kicker{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--warn)}
+.panel-title{font-size:22px;font-weight:800}
+.status-pill{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+
+/* ── Form Grid ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.span-2{grid-column:span 2}
+.field label-text,.field>span{font-size:13px;font-weight:700;color:var(--text)}
+.field small{color:var(--muted);font-size:11px;line-height:1.45}
+input[type='text'],input[type='number'],select,textarea{width:100%;padding:12px 14px;border-radius:var(--radius-md);border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);font-size:14px;transition:.2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,140,255,.15);background:rgba(255,255,255,.09)}
+textarea{resize:vertical;min-height:70px}
+select option{background:#1a2040;color:#eee}
+.path-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+
+/* ── Toggle Cards ── */
+.toggles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.toggle-card{padding:14px;border-radius:var(--radius-md);border:1px solid var(--border);background:rgba(255,255,255,.04);display:flex;flex-direction:column;gap:6px;transition:.2s}
+.toggle-card:hover{border-color:var(--border-accent)}
+.toggle-card span{font-size:13px;font-weight:700}
+.toggle-card small{color:var(--muted);font-size:11px;line-height:1.4}
+input[type='checkbox'],input[type='radio']{width:16px;height:16px;accent-color:var(--accent)}
+
+/* ── Buttons ── */
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+button{padding:11px 20px;border-radius:var(--radius-md);border:1px solid var(--border);font-size:13px;font-weight:800;cursor:pointer;transition:.2s;background:rgba(255,255,255,.06);color:var(--text)}
+button:hover:not(:disabled){transform:translateY(-1px);border-color:rgba(255,255,255,.2)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--accent),#7c5bff);border-color:rgba(91,140,255,.3);box-shadow:0 8px 24px rgba(91,140,255,.25)}
+.btn-secondary{color:#0a1020;background:linear-gradient(135deg,#80f0d8,var(--accent2));border-color:rgba(56,207,184,.3);box-shadow:0 8px 24px rgba(56,207,184,.2)}
+.btn-danger{color:#fff;background:linear-gradient(135deg,#ff8b7d,var(--danger));box-shadow:0 8px 24px rgba(255,107,122,.2)}
+.btn-ghost{background:rgba(255,255,255,.06)}
+
+/* ── Stats Panel ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{padding:16px;border-radius:var(--radius-md);border:1px solid var(--border);background:linear-gradient(155deg,rgba(255,255,255,.07),rgba(255,255,255,.02));position:relative}
+.stat-card::after{content:'';position:absolute;bottom:6px;left:10px;right:10px;height:2px;border-radius:999px;background:var(--accent)}
+.stat-card:nth-child(2n)::after{background:var(--accent2)}
+.stat-card span{display:block;color:var(--muted);font-size:11px;margin-bottom:8px;letter-spacing:.02em}
+.stat-card strong{font-size:32px;font-weight:800;color:#f0f6ff}
+
+/* ── Message / Status Box ── */
+.msg-box{margin-top:14px;padding:16px;border-radius:var(--radius-md);border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.msg-label{color:var(--muted);font-size:12px;margin-bottom:8px}
+.msg-content{padding:10px 12px;border-radius:var(--radius-sm);background:linear-gradient(150deg,rgba(91,140,255,.12),rgba(56,207,184,.08));border:1px solid rgba(91,140,255,.15);color:#e0f0ff;font-size:14px;font-weight:700;line-height:1.55}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(91,140,255,.14);color:#b5d0ff}
+.chip.warn{background:rgba(255,183,77,.14);color:#ffe0aa}
+.chip.success{background:rgba(79,216,160,.14);color:#b0ffd8}
+
+/* ── Quick Actions ── */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.quick-grid button{min-height:42px;border-radius:var(--radius-md);font-size:12px}
+
+/* ── Log Panel ── */
+.log-panel{grid-column:1/-1;margin-top:18px}
+.log-view{height:340px;overflow:auto;border-radius:var(--radius-md);padding:16px;border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(5,9,18,.97),rgba(10,14,28,.95));font-family:'Cascadia Code',Consolas,monospace;font-size:13px;color:#d8eeff}
+.log-line{margin-bottom:8px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.log-line.info{color:#d0ecff}
+.log-line.warn{color:#ffe0aa}
+.log-line.error{color:#ffb5c2}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.03);border-radius:999px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:999px}
+
+/* ── Responsive ── */
+@media(max-width:1100px){
+  .hero-banner,.main-grid{grid-template-columns:1fr}
+  .form-grid,.toggles,.stat-grid{grid-template-columns:1fr}
+  .field.span-2{grid-column:span 1}
+}
+
+/* ── Section Divider ── */
+.section-sep{margin:12px 0;border:0;border-top:1px dashed rgba(255,255,255,.08)}
+
+/* ── Tip Card ── */
+.tip-card{margin-top:14px;padding:16px;border-radius:var(--radius-md);border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.tip-card h3{font-size:16px;font-weight:800;margin-bottom:6px}
+
+/* ── Learning Section ── */
+.learning-section{margin-top:14px;padding:16px;border-radius:var(--radius-md);border:1px solid rgba(56,207,184,.15);background:rgba(56,207,184,.04)}
+.learning-title{font-size:12px;font-weight:800;color:var(--accent2);letter-spacing:.08em;margin-bottom:10px}
+.learning-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.learning-summary{margin-top:8px;color:#8be5d0;font-size:12px}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="shell">
+  <!-- Top Bar -->
+  <nav class="topbar">
+    <div class="topbar-brand"><span class="dot"></span> JAV 自动化工具</div>
+    <div class="topbar-tabs">
+      <button class="topbar-tab active">JAV 爬虫</button>
+      <button class="topbar-tab">视频整理</button>
+    </div>
+    <span class="version">v0.25</span>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div>
+      <h1>JAV 自动化爬虫工具</h1>
+      <p class="hero-subtitle">基于 raawaa/jav-scrapy 打造的桌面端一体化工具，包含爬虫、整理与广告检测三大模块。</p>
+      <div class="hero-tip">请确认已设置好网络代理，国内网络需要代理才能正常访问 JAVBus 站点。</div>
+      <div class="hero-actions-row" style="margin-top:14px">
+        <button class="btn-ghost">更换背景</button>
+        <button class="btn-ghost">更新反屏蔽</button>
+        <button class="btn-ghost">打开输出</button>
+        <button class="btn-ghost">查看磁力</button>
+      </div>
+    </div>
+    <div class="hero-side-card">
+      <span class="hero-side-title">版本更新</span>
+      <ul class="hero-side-list">
+        <li><strong>v0.25</strong> AI 冷启动修复、日志逐项细化</li>
+        <li><strong>v0.24</strong> 整理模块功能增强与控制优化</li>
+        <li><strong>v0.23</strong> 内嵌 AI 广告检测模型上线</li>
+        <li><strong>v0.22</strong> 一体化增强与广告处理可见性优化</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Main: Form + Stats -->
+  <div class="main-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div><p class="panel-kicker">爬虫设置</p><h2 class="panel-title">参数配置</h2></div>
+        <div class="status-pill">待命</div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field"><span>任务模板</span><select><option>完整爬取</option><option>仅磁力</option></select><small>选择一个预设任务模板快速填充。</small></div>
+        <div class="field"><span>抓取上限</span><input type="number" value="0"/><small>0 = 不限；正数 = 最多抓取该条数。</small></div>
+        <div class="field span-2"><span>站点地址</span><input type="text" placeholder="https://www.javbus.com"/><small>JavBus 主站或镜像站 URL。</small></div>
+        <div class="field span-2"><span>输出目录</span><div class="path-row"><input type="text" placeholder="选择爬虫结果保存路径"/><button class="btn-ghost">选择</button></div></div>
+        <div class="field"><span>总页数</span><input type="number" value="0"/><small>0 = 自动检测全部页。</small></div>
+        <div class="field"><span>每页条数</span><input type="number" value="30"/><small>站点默认30条/页。</small></div>
+        <div class="field"><span>并发数</span><input type="number" value="3"/><small>同时抓取的页面数量。</small></div>
+        <div class="field"><span>请求间隔 (ms)</span><input type="number" value="200"/><small>请求间隔，防止被封IP。</small></div>
+        <div class="field"><span>超时 (ms)</span><input type="number" value="30000"/><small>单次请求超时时间。</small></div>
+        <div class="field span-2"><span>代理设置</span><input type="text" placeholder="http://127.0.0.1:7890"/><small>HTTP/SOCKS5 代理地址。</small></div>
+        <div class="field span-2"><span>磁力排除关键词</span><input type="text" placeholder="字幕, 流出（逗号分隔）"/><small>包含这些关键词的磁力链接会被过滤。</small></div>
+      </div>
+
+      <div class="tip-card">
+        <h3>智能建议</h3>
+        <p style="color:var(--muted);font-size:13px;margin-top:4px">建议总页数设为 5，预计可抓取约 150 条记录。</p>
+      </div>
+
+      <div class="toggles">
+        <label class="toggle-card"><input type="checkbox"/><span>Cloudflare 绕过</span><small>需要时自动使用 Cloudflare Worker 中转。</small></label>
+        <label class="toggle-card"><input type="checkbox"/><span>二次验证</span><small>抓取后回查页面验证数据完整性。</small></label>
+        <label class="toggle-card"><input type="checkbox"/><span>仅无磁力</span><small>只抓取尚未获得磁力的番号。</small></label>
+        <label class="toggle-card"><input type="checkbox"/><span>全磁力模式</span><small>保留所有磁力链接而非最优。</small></label>
+        <label class="toggle-card"><input type="checkbox"/><span>磁力内容验证</span><small>验证磁力中是否包含实际视频文件。</small></label>
+        <label class="toggle-card"><input type="checkbox"/><span>不下载封面</span><small>跳过封面图片下载以加速。</small></label>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary">开始抓取</button>
+        <button class="btn-danger" disabled>停止</button>
+        <button class="btn-secondary">重新开始</button>
+        <button class="btn-ghost">清空日志</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div><p class="panel-kicker">运行状态</p><h2 class="panel-title">实时数据</h2></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><span>当前页</span><strong>1</strong></div>
+        <div class="stat-card"><span>队列中</span><strong>0</strong></div>
+        <div class="stat-card"><span>已尝试</span><strong>0</strong></div>
+        <div class="stat-card"><span>已完成</span><strong>0</strong></div>
+      </div>
+      <div class="msg-box">
+        <p class="msg-label">当前状态</p>
+        <div class="msg-content">等待开始...</div>
+        <hr class="section-sep"/>
+        <p class="msg-label">未完成任务</p>
+        <div class="chip-row"><span class="chip warn">暂无</span></div>
+        <hr class="section-sep"/>
+        <p class="msg-label">常用操作</p>
+        <div class="quick-grid">
+          <button class="btn-ghost">刷新排名</button>
+          <button class="btn-ghost">打开输出</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div class="panel log-panel">
+    <div class="panel-head">
+      <div><p class="panel-kicker">运行日志</p><h2 class="panel-title">执行明细</h2></div>
+      <button class="btn-ghost">打开日志目录</button>
+    </div>
+    <div class="log-view">
+      <div class="log-line info">[10:30:00] 系统就绪，等待用户操作...</div>
+      <div class="log-line info">[10:30:05] 代理检测通过: http://127.0.0.1:7890</div>
+      <div class="log-line warn">[10:30:12] 注意：未设置磁力排除关键词</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+.stat-card {
+  padding: 18px;
+}
+
+.stat-card span,
+.message-label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stat-card strong {
+  font-size: 34px;
+}
+
+.message-box {
+  margin-top: 16px;
+  padding: 20px;
+}
+
+.message-box p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.current-box,
+.task-box,
+.page-gap-box,
+.failed-box {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.item-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 6px;
+  align-content: flex-start;
+}
+
+.item-grid-tall {
+  max-height: 210px;
+}
+
+.current-chip,
+.duplicate-chip,
+.unfinished-chip,
+.page-gap-chip,
+.task-empty-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.current-chip {
+  background: rgba(86, 224, 255, 0.14);
+  color: #b9f6ff;
+}
+
+.unfinished-chip {
+  background: rgba(255, 110, 157, 0.16);
+  color: #ffd2e4;
+}
+
+.duplicate-chip {
+  background: rgba(186, 128, 255, 0.18);
+  color: #ecd7ff;
+}
+
+.page-gap-chip {
+  background: rgba(255, 178, 107, 0.18);
+  color: #ffe3c4;
+}
+
+.task-empty-chip {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+}
+
+.failed-items {
+  display: grid;
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.failed-card,
+.failed-summary {
+  border-radius: 18px;
+}
+
+.failed-card {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(255, 125, 119, 0.16);
+  background: linear-gradient(145deg, rgba(255, 125, 119, 0.08), rgba(255, 255, 255, 0.04));
+}
+
+.failed-card strong {
+  color: #fff0f2;
+  line-height: 1.4;
+}
+
+.failed-meta {
+  display: grid;
+  gap: 8px;
+}
+
+.failed-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.failed-next-retry {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.failed-summary {
+  padding: 10px 12px;
+  background: rgba(255, 125, 119, 0.12);
+  color: #ffd9dd;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hidden {
+  display: none;
+}

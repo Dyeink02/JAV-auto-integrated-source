@@ -1,0 +1,164 @@
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-topline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.hero-quick-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.eyebrow,
+.panel-kicker,
+.tip-kicker {
+  margin: 0;
+  color: var(--accent-warm);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.version-badge,
+.message-count,
+.failed-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.09);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.version-badge {
+  margin-left: auto;
+}
+
+.toolbar-button {
+  padding: 9px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+}
+
+.hero-subtitle {
+  max-width: 720px;
+  margin: 10px 0 6px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.hero-source,
+.subtitle-note,
+.log-file-path,
+.failed-card span,
+.tip-secondary {
+  color: var(--muted-soft);
+}
+
+.hero-source {
+  margin: 0;
+  font-size: 13px;
+}
+
+.hero-source a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.hero-source a:hover {
+  text-decoration: underline;
+}
+
+.hero-actions,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-actions {
+  gap: 10px;
+}
+
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.hero-note,
+.tip-card,
+.toggle-card,
+.stat-card,
+.message-box {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(8, 13, 29, 0.52);
+}
+
+.hero-note {
+  border-radius: 24px;
+  padding: 14px 16px;
+}
+
+.hero-note-head {
+  margin-bottom: 8px;
+}
+
+.hero-note-title {
+  display: inline-block;
+  color: var(--accent-warm);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-note-scroll {
+  max-height: 132px;
+  padding-right: 6px;
+  overflow-y: auto;
+}
+
+.hero-note-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-note-list li {
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  line-height: 1.55;
+  color: var(--muted-soft);
+  font-size: 13px;
+}
+
+.hero-note-list strong {
+  display: inline-block;
+  min-width: 52px;
+  margin-right: 8px;
+  color: var(--accent-cyan);
+  font-size: 13px;
+}

@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JAV&#33258;&#21160;&#21270;&#29228;&#34411;&#24037;&#20855;</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-backdrop"></div>
+    <div class="page-noise"></div>
+    <div class="page-glow glow-coral"></div>
+    <div class="page-glow glow-cyan"></div>
+
+    <div class="shell">
+      <div class="workspace-shell">
+        <nav class="workspace-topbar">
+          <span class="workspace-topbar-brand">JAV 自动化工具</span>
+          <div class="workspace-topbar-tabs">
+            <button id="nav-crawler" class="workspace-nav-button is-active" type="button">JAV 爬虫</button>
+            <button id="nav-organizer" class="workspace-nav-button" type="button">视频整理</button>
+          </div>
+        </nav>
+
+        <div class="workspace-content">
+          <section id="crawler-workspace" class="workspace-pane">
+      <header class="hero">
+        <section class="hero-copy">
+          <div class="hero-topline">
+            <div class="hero-quick-actions">
+              <button
+                id="choose-background"
+                class="ghost-button toolbar-button"
+                type="button"
+                data-ui-text="actions.changeBackground"
+              ></button>
+              <button
+                id="reset-background"
+                class="ghost-button toolbar-button"
+                type="button"
+                data-ui-text="actions.resetBackground"
+              ></button>
+            </div>
+            <p class="eyebrow" data-ui-text="hero.eyebrow"></p>
+            <span id="version-badge" class="version-badge">v0.26</span>
+          </div>
+
+          <h1 data-ui-text="hero.title"></h1>
+          <p class="hero-subtitle" data-ui-text="hero.subtitle"></p>
+
+          <p class="hero-source">
+            <span data-ui-text="hero.sourcePrefix"></span>
+            <a id="source-link" href="https://github.com/raawaa/jav-scrapy" target="_blank" rel="noreferrer">
+              raawaa/jav-scrapy
+            </a>
+          </p>
+          <p class="hero-connection-tip" data-ui-text="hero.connectionTip"></p>
+        </section>
+
+        <aside class="hero-side">
+          <div class="hero-note">
+            <div class="hero-note-head">
+              <span class="hero-note-title" data-ui-text="hero.versionTitle"></span>
+            </div>
+            <div class="hero-note-scroll">
+              <ul id="version-history-list" class="hero-note-list"></ul>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <button id="update-antiblock" class="ghost-button" type="button" data-ui-text="actions.updateAntiBlock"></button>
+            <button id="open-output" class="ghost-button" type="button" data-ui-text="actions.openOutput"></button>
+            <button id="open-magnet-file" class="ghost-button" type="button" data-ui-text="actions.openMagnetFile"></button>
+          </div>
+        </aside>
+      </header>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker" data-ui-text="panels.setupKicker"></p>
+              <h2 data-ui-text="panels.setupTitle"></h2>
+            </div>
+            <div id="status-pill" class="status-pill idle">&#24453;&#21629;</div>
+          </div>
+
+          <div class="grid">
+            <label class="field">
+              <span data-ui-text="fields.taskTemplate"></span>
+              <select id="taskTemplate"></select>
+              <small data-ui-text="fields.taskTemplateHelp"></small>
+            </label>
+
+            <label class="field">
+              <span data-ui-text="fields.limit"></span>
+              <input id="limit" type="number" min="0" step="1" />
+              <small data-ui-text="fields.limitHelp"></small>
+            </label>
+
+            <label class="field span-2">
+              <span data-ui-text="fields.base"></span>
+              <input id="base" type="text" data-ui-placeholder="placeholders.base" />
+              <div id="base-url-hints" class="base-url-hints"></div>
+            </label>
+
+            <label class="field span-2">
+              <span data-ui-text="fields.output"></span>
+              <div class="path-row">
+                <input id="output" type="text" data-ui-placeholder="placeholders.output" />
+                <button id="browse-output" class="inline-button" type="button" data-ui-text="actions.browseOutput"></button>
+              </div>
+            </label>
+
+            <label class="field">
+              <span data-ui-text="fields.totalPages"></span>
+              <input id="totalPages" type="number" min="0" step="1" />
+              <small data-ui-text="fields.totalPagesHelp"></small>
+            </label>
+
+            <label class="field">
+              <span data-ui-text="fields.itemsPerPage"></span>
+              <input id="itemsPerPage" type="number" min="1" step="1" />
+              <small data-ui-text="fields.itemsPerPageHelp"></small>
+            </label>
+
+            <label class="field">
+              <span data-ui-text="fields.parallel"></span>
+              <input id="parallel" type="number" min="1" step="1" />
+              <small data-ui-text="fields.parallelHelp"></small>
+            </label>
+
+            <label class="field">
+              <span data-ui-text="fields.delay"></span>
+              <input id="delay" type="number" min="0" step="1" />
+              <small data-ui-text="fields.delayHelp"></small>
+            </label>
+
+            <label class="field">
+              <span data-ui-text="fields.timeout"></span>
+              <input id="timeout" type="number" min="1000" step="1000" />
+              <small data-ui-text="fields.timeoutHelp"></small>
+            </label>
+
+            <label class="field span-2">
+              <div class="field-header">
+                <span data-ui-text="fields.proxy"></span>
+                <span id="proxy-status" class="proxy-status-chip empty" data-ui-text="proxyStatus.empty"></span>
+              </div>
+              <input id="proxy" type="text" data-ui-placeholder="placeholders.proxy" />
+              <small id="proxy-status-detail" data-ui-text="fields.proxyHelp"></small>
+            </label>
+
+            <label class="field span-2">
+              <span data-ui-text="fields.magnetExcludeKeywords"></span>
+              <input
+                id="magnetExcludeKeywords"
+                type="text"
+                data-ui-placeholder="placeholders.magnetExcludeKeywords"
+              />
+              <small data-ui-text="fields.magnetExcludeKeywordsHelp"></small>
+            </label>
+          </div>
+
+          <section class="tip-card">
+            <div class="tip-head">
+              <div>
+                <p class="tip-kicker" data-ui-text="advice.kicker"></p>
+                <h3 data-ui-text="advice.title"></h3>
+              </div>
+              <button id="use-suggested-pages" class="ghost-button" type="button" data-ui-text="advice.applyButton"></button>
+            </div>
+
+            <p id="total-pages-advice" class="tip-primary"></p>
+            <p id="total-pages-meta" class="tip-secondary"></p>
+          </section>
+
+          <div class="toggles">
+            <label class="toggle-card">
+              <input id="cloudflare" type="checkbox" />
+              <span data-ui-text="toggles.cloudflareTitle"></span>
+              <small data-ui-text="toggles.cloudflareHelp"></small>
+            </label>
+
+            <label class="toggle-card">
+              <input id="secondValidation" type="checkbox" />
+              <span data-ui-text="toggles.secondValidationTitle"></span>
+              <small data-ui-text="toggles.secondValidationHelp"></small>
+            </label>
+
+            <label class="toggle-card">
+              <input id="nomag" type="checkbox" />
+              <span data-ui-text="toggles.nomagTitle"></span>
+              <small data-ui-text="toggles.nomagHelp"></small>
+            </label>
+
+            <label class="toggle-card">
+              <input id="allmag" type="checkbox" />
+              <span data-ui-text="toggles.allmagTitle"></span>
+              <small data-ui-text="toggles.allmagHelp"></small>
+            </label>
+
+            <label class="toggle-card">
+              <input id="magnetContentValidation" type="checkbox" />
+              <span data-ui-text="toggles.magnetContentValidationTitle"></span>
+              <small data-ui-text="toggles.magnetContentValidationHelp"></small>
+            </label>
+
+            <label class="toggle-card">
+              <input id="nopic" type="checkbox" />
+              <span data-ui-text="toggles.nopicTitle"></span>
+              <small data-ui-text="toggles.nopicHelp"></small>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="start" class="primary-button" type="button" data-ui-text="actions.start"></button>
+            <button id="stop" class="danger-button" type="button" data-ui-text="actions.stop" disabled></button>
+            <button id="restart" class="secondary-button" type="button" data-ui-text="actions.restart"></button>
+            <button id="clear-log" class="ghost-button" type="button" data-ui-text="actions.clearLog"></button>
+          </div>
+        </section>
+
+        <section class="panel stats-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker" data-ui-text="panels.statusKicker"></p>
+              <h2 data-ui-text="panels.statusTitle"></h2>
+            </div>
+          </div>
+
+          <div class="stat-grid">
+            <article class="stat-card">
+              <span data-ui-text="stats.currentPage"></span>
+              <strong id="stat-page">1</strong>
+            </article>
+            <article class="stat-card">
+              <span data-ui-text="stats.queued"></span>
+              <strong id="stat-queued">0</strong>
+            </article>
+            <article class="stat-card">
+              <span data-ui-text="stats.attempted"></span>
+              <strong id="stat-attempted">0</strong>
+            </article>
+            <article class="stat-card">
+              <span data-ui-text="stats.completed"></span>
+              <strong id="stat-completed">0</strong>
+            </article>
+          </div>
+
+          <div class="message-box">
+            <p class="message-label" data-ui-text="state.label"></p>
+            <p id="state-message"></p>
+
+            <div id="current-box" class="current-box hidden">
+              <p class="message-label" data-ui-text="state.currentLabel"></p>
+              <div id="current-items" class="item-grid"></div>
+            </div>
+
+            <div id="unfinished-box" class="task-box">
+              <p class="message-label message-label-row">
+                <span data-ui-text="state.unfinishedLabel"></span>
+                <span id="unfinished-total" class="message-count">0</span>
+              </p>
+              <div id="unfinished-items" class="item-grid item-grid-tall"></div>
+            </div>
+
+            <div id="duplicate-box" class="task-box hidden">
+              <p class="message-label message-label-row">
+                <span data-ui-text="state.duplicateLabel"></span>
+                <span id="duplicate-total" class="message-count">0</span>
+              </p>
+              <div id="duplicate-items" class="item-grid"></div>
+            </div>
+
+            <div id="page-gap-box" class="page-gap-box hidden">
+              <p class="message-label" data-ui-text="state.pageGapLabel"></p>
+              <div id="page-gap-items" class="item-grid"></div>
+            </div>
+
+            <div id="failed-box" class="failed-box hidden">
+              <p class="message-label" data-ui-text="state.failedLabel"></p>
+              <div id="failed-items" class="failed-items"></div>
+            </div>
+          </div>
+
+          <section class="ranking-card">
+            <div class="ranking-head">
+              <div>
+                <p class="message-label" data-ui-text="ranking.label"></p>
+                <h3 data-ui-text="ranking.title"></h3>
+              </div>
+              <button id="refresh-ranking" class="ghost-button" type="button" data-ui-text="ranking.refreshButton"></button>
+            </div>
+
+            <div class="ranking-controls">
+              <label class="field compact-field">
+                <span data-ui-text="ranking.channelLabel"></span>
+                <select id="ranking-source-channel"></select>
+              </label>
+
+              <label class="field compact-field">
+                <span data-ui-text="ranking.modeLabel"></span>
+                <select id="ranking-mode"></select>
+              </label>
+
+              <label id="ranking-year-field" class="field compact-field hidden">
+                <span data-ui-text="ranking.yearLabel"></span>
+                <select id="ranking-year"></select>
+              </label>
+
+              <label id="ranking-month-field" class="field compact-field hidden">
+                <span data-ui-text="ranking.monthLabel"></span>
+                <select id="ranking-month"></select>
+              </label>
+            </div>
+
+            <p id="ranking-help" class="ranking-help" data-ui-text="ranking.monthHelp"></p>
+            <p id="ranking-channel-tip" class="ranking-note" data-ui-text="ranking.officialProxyTip"></p>
+            <div id="ranking-meta" class="ranking-meta"></div>
+            <div id="ranking-source" class="ranking-source hidden">
+              <span id="ranking-source-text"></span>
+              <button id="open-ranking-source" class="inline-button" type="button" data-ui-text="ranking.openSource"></button>
+            </div>
+            <div id="ranking-view" class="ranking-view"></div>
+          </section>
+        </section>
+
+        <section class="panel log-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker" data-ui-text="panels.logKicker"></p>
+              <h2 data-ui-text="panels.logTitle"></h2>
+            </div>
+            <button id="open-log-folder" class="ghost-button" type="button" data-ui-text="actions.openLogFolder"></button>
+          </div>
+          <p id="log-file-path" class="log-file-path"></p>
+          <div id="log-view" class="log-view"></div>
+        </section>
+      </main>
+          </section>
+
+          <section id="organizer-workspace" class="workspace-pane hidden">
+            <header class="hero organizer-hero">
+              <section class="hero-copy">
+                <div class="hero-topline">
+                  <p class="eyebrow">视频整理模块</p>
+                  <span id="organizer-version-badge" class="version-badge">v0.26</span>
+                </div>
+                <h1>下载文件快速归类</h1>
+                <p class="hero-subtitle">沿用 JAV 主程序风格，把“待整理 / 含开头广告 / 待删除”放到同一个软件里完成。</p>
+
+              </section>
+              <aside class="hero-side">
+                <div class="hero-note">
+                  <div class="hero-note-head">
+                    <span class="hero-note-title">版本更新</span>
+                  </div>
+                  <div class="hero-note-scroll">
+                    <ul id="organizer-version-history-list" class="hero-note-list"></ul>
+                  </div>
+                </div>
+              </aside>
+            </header>
+
+            <main class="layout">
+              <section class="panel form-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">整理配置</p>
+                    <h2>目录与规则</h2>
+                  </div>
+                  <div id="organizer-status-pill" class="status-pill idle">等待开始整理。</div>
+                </div>
+
+                <div class="grid">
+                  <label class="field span-2">
+                    <span>目标根目录</span>
+                    <div class="path-row">
+                      <input id="organizer-root" type="text" placeholder="请选择需要整理的根目录" />
+                      <button id="organizer-browse-root" class="inline-button" type="button">选择</button>
+                    </div>
+                    <small>建议客户将所有下载文件统一放在该目录下。</small>
+                  </label>
+
+                  <label class="field span-2">
+                    <span>爬虫结果目录（filmData.json）</span>
+                    <div class="path-row">
+                      <input id="organizer-crawl-output" type="text" placeholder="默认使用最近一次爬虫输出目录" />
+                      <button id="organizer-use-latest-output" class="inline-button" type="button">最近爬虫结果</button>
+                    </div>
+                    <div class="organizer-inline-actions">
+                      <button id="organizer-load-codes" class="ghost-button" type="button">加载番号名单</button>
+                    </div>
+                    <small id="organizer-code-source">来源：尚未加载番号名单</small>
+                    <small>当前已加载番号数量：<strong id="organizer-code-count">0</strong></small>
+                  </label>
+
+                  <label class="field">
+                    <span>最小体积 (MB)</span>
+                    <input id="organizer-min-size" type="number" min="1" step="1" />
+                    <small>低于该体积的视频会归为广告文件，按“广告处理方式”执行。</small>
+                  </label>
+
+                  <label class="field">
+                    <span>冲突后缀</span>
+                    <input id="organizer-suffix" type="text" placeholder="-A" />
+                    <small>同番号多文件时依次附加后缀，例如 -A / -B。</small>
+                  </label>
+
+                  <label class="field span-2">
+                    <span>广告处理方式（显式选择）</span>
+                    <div class="toggles organizer-ad-action-grid">
+                      <label class="toggle-card organizer-ad-action-card">
+                        <input
+                          id="organizer-ad-file-action-move"
+                          name="organizer-ad-file-action"
+                          type="radio"
+                          value="move-to-delete"
+                          checked
+                        />
+                        <span>移入待删除（推荐）</span>
+                        <small>广告文件先放入待删除目录，便于人工复核。</small>
+                      </label>
+                      <label class="toggle-card organizer-ad-action-card">
+                        <input
+                          id="organizer-ad-file-action-delete"
+                          name="organizer-ad-file-action"
+                          type="radio"
+                          value="delete-directly"
+                        />
+                        <span>直接删除广告文件</span>
+                        <small>广告文件不再进入待删除，直接清理，速度更快。</small>
+                      </label>
+                    </div>
+                    <small>你可以在每次整理前切换该模式。</small>
+                  </label>
+                </div>
+
+                <div class="toggles">
+                  <label class="toggle-card">
+                    <input id="organizer-include-subdirectories" type="checkbox" checked />
+                    <span>扫描子目录</span>
+                    <small>开启后会递归扫描根目录下所有子目录。</small>
+                  </label>
+
+                  <label class="toggle-card">
+                    <input id="organizer-dry-run" type="checkbox" />
+                    <span>开始按钮使用预览模式</span>
+                    <small>开启后点击"执行整理"也只做扫描，不移动文件。</small>
+                  </label>
+                </div>
+
+                <section class="task-box organizer-learning-box">
+                  <p class="message-label">广告样本学习</p>
+                  <p class="organizer-learning-tip">
+                    可导入“广告开头样本”和“正常开头样本”，也可直接输入番号自动抓帧学习。所有学习仅在本地执行。
+                  </p>
+
+                  <div class="grid organizer-learning-grid">
+                    <label class="field">
+                      <span>广告风险阈值 (1-100)</span>
+                      <input id="organizer-ad-threshold" type="number" min="1" max="100" step="1" value="60" />
+                      <small>评分高于阈值的视频会进入“含开头广告”，并输出复核与补抓清单。</small>
+                    </label>
+
+                    <label class="field span-2">
+                      <span>广告关键词（逗号分隔）</span>
+                      <input id="organizer-ad-keywords" type="text" placeholder="示例：片头广告, 站点水印, 宣传（逗号分隔）" />
+                      <small>文件名命中关键词会提高广告风险评分。</small>
+                    </label>
+                  </div>
+
+                  <label class="field">
+                    <span>按番号自动学习（可多条，逗号/换行分隔）</span>
+                    <textarea
+                      id="organizer-learning-codes"
+                      rows="3"
+                      placeholder="例如：ABP-001, IPX-777, SSIS-321"
+                    ></textarea>
+                    <small>用于告诉软件“这些番号是广告样本”或“这些番号是正常样本”。</small>
+                  </label>
+
+                  <input id="organizer-ad-detection-enabled" type="checkbox" checked hidden />
+                  <div class="toggles organizer-ad-detection-grid">
+                    <label class="toggle-card organizer-ad-action-card">
+                      <input
+                        id="organizer-ad-detection-enable"
+                        name="organizer-ad-detection-mode"
+                        type="radio"
+                        value="enabled"
+                        checked
+                      />
+                      <span>启用 AI 广告检测（推荐）</span>
+                      <small>结合关键词、样本相似度与片头模板，识别“含开头广告”视频并单独归档。</small>
+                    </label>
+                    <label class="toggle-card organizer-ad-action-card">
+                      <input
+                        id="organizer-ad-detection-disable"
+                        name="organizer-ad-detection-mode"
+                        type="radio"
+                        value="disabled"
+                      />
+                      <span>关闭 AI 广告检测</span>
+                      <small>仅按文件大小判定广告文件，速度更快但识别精度较低。</small>
+                    </label>
+                  </div>
+
+                  <label class="field">
+                    <span>ONNX 神经网络</span>
+                    <span id="organizer-onnx-status" style="font-size:12px;color:#888;">检测中...</span>
+                    <small>真实 MobileNetV3 ONNX 神经网络推理。模型文件位于 resources/models/ 目录。</small>
+                  </label>
+
+                  <div class="organizer-inline-actions organizer-learning-actions">
+                    <div class="help-action-group">
+                      <button id="organizer-import-ad-samples" class="ghost-button" type="button">导入广告样本</button>
+                      <button id="organizer-help-import-ad" class="icon-help-button" type="button" title="导入广告样本说明">?</button>
+                    </div>
+                    <div class="help-action-group">
+                      <button id="organizer-import-normal-samples" class="ghost-button" type="button">导入正常样本</button>
+                      <button id="organizer-help-import-normal" class="icon-help-button" type="button" title="导入正常样本说明">?</button>
+                    </div>
+                    <div class="help-action-group">
+                      <button id="organizer-learn-ad-by-codes" class="ghost-button" type="button">按番号学习广告样本</button>
+                      <button id="organizer-help-learn-ad" class="icon-help-button" type="button" title="按番号学习广告说明">?</button>
+                    </div>
+                    <div class="help-action-group">
+                      <button id="organizer-learn-normal-by-codes" class="ghost-button" type="button">按番号学习正常样本</button>
+                      <button id="organizer-help-learn-normal" class="icon-help-button" type="button" title="按番号学习正常说明">?</button>
+                    </div>
+                    <button id="organizer-refresh-learning-summary" class="ghost-button" type="button">刷新学习摘要</button>
+                    <button id="organizer-clear-learning-model" class="danger-button" type="button">删除所有学习摘要</button>
+                  </div>
+                  <small class="organizer-learning-guide">
+                    说明：导入广告样本=选择“有广告开头”的图片或视频；导入正常样本=选择“无广告开头”的正常视频。按番号学习会在目录中匹配番号并自动抓取开头帧。
+                  </small>
+                  <small id="organizer-learning-summary" class="organizer-learning-summary">尚未加载学习模型。</small>
+                </section>
+
+                <div class="actions">
+                  <button id="organizer-start" class="primary-button" type="button">执行整理</button>
+                  <button id="organizer-pause" class="ghost-button" type="button" disabled>暂停</button>
+                  <button id="organizer-stop" class="danger-button" type="button" disabled>停止</button>
+                  <button id="organizer-preview" class="secondary-button" type="button">预览扫描</button>
+                  <button id="organizer-open-root" class="ghost-button" type="button">打开根目录</button>
+                  <button id="organizer-clear-log" class="ghost-button" type="button">清空整理日志</button>
+                  <button id="organizer-export-log" class="ghost-button" type="button">导出整理日志</button>
+                </div>
+              </section>
+
+              <section class="panel stats-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">整理统计</p>
+                    <h2>运行结果</h2>
+                  </div>
+                </div>
+
+                <div class="stat-grid organizer-stat-grid">
+                  <article class="stat-card">
+                    <span>扫描文件</span>
+                    <strong id="organizer-stat-scanned">0</strong>
+                  </article>
+                  <article class="stat-card">
+                    <span>视频文件</span>
+                    <strong id="organizer-stat-video">0</strong>
+                  </article>
+                  <article class="stat-card">
+                    <span>命中番号</span>
+                    <strong id="organizer-stat-matched">0</strong>
+                  </article>
+                  <article class="stat-card">
+                    <span>移入待整理</span>
+                    <strong id="organizer-stat-waiting">0</strong>
+                  </article>
+                  <article class="stat-card">
+                    <span>移入待删除</span>
+                    <strong id="organizer-stat-delete">0</strong>
+                  </article>
+                  <article class="stat-card">
+                    <span>失败数</span>
+                    <strong id="organizer-stat-failed">0</strong>
+                  </article>
+                </div>
+
+                <div class="message-box">
+                  <p class="message-label">最近状态</p>
+                  <p id="organizer-summary-message">等待开始整理。</p>
+
+                  <div class="task-box">
+                    <p class="message-label">常用目录</p>
+                    <div class="organizer-quick-actions">
+                      <button id="organizer-open-waiting" class="ghost-button" type="button">打开待整理</button>
+                      <button id="organizer-open-delete" class="ghost-button" type="button">打开待删除</button>
+                      <button id="organizer-open-intro-ad" class="ghost-button" type="button">打开含开头广告</button>
+                      <button id="organizer-open-reports" class="ghost-button" type="button">打开报告目录</button>
+                    </div>
+                  </div>
+
+                  <div class="task-box">
+                    <p class="message-label">报告文件</p>
+                    <div id="organizer-report-paths" class="organizer-report-list"></div>
+                  </div>
+
+                  <div class="task-box">
+                    <p class="message-label">整理复盘</p>
+                    <div id="organizer-review-panel" class="organizer-review-panel">
+                      <p class="organizer-review-empty">运行完成后会在这里显示：遗漏番号、补抓磁力、误判复核入口。</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="panel log-panel">
+                <div class="panel-head">
+                  <div>
+                    <p class="panel-kicker">整理日志</p>
+                    <h2>执行明细</h2>
+                  </div>
+                </div>
+                <div id="organizer-log-view" class="log-view"></div>
+              </section>
+            </main>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script src="../common/text/appInfo.js"></script>
+    <script src="../common/text/taskConfig.js"></script>
+    <script src="../common/text/versionHistory.js"></script>
+    <script src="../common/text/uiTextSource.js"></script>
+    <script src="../common/text/runtimeText.js"></script>
+    <script src="../common/appText.js"></script>
+    <script src="./uiText.js"></script>
+    <script src="./logController.js"></script>
+    <script src="./stateController.js"></script>
+    <script src="./formFieldHelpers.js"></script>
+    <script src="./formProxyValidator.js"></script>
+    <script src="./formController.js"></script>
+    <script src="./rankingController.js"></script>
+    <script src="../common/progressSchema.js"></script>
+    <script src="./organizerFormController.js"></script>
+    <script src="./organizerProgressController.js"></script>
+    <script src="./organizerResultController.js"></script>
+    <script src="./organizerController.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
